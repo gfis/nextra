@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+    ant-buildfile for commandline and web application
+    @(#) $Id: bfb160b42e4807f6c45c2e455d983904452f16ff $
+    2024-11-23, Georg Fischer: copied from jextra
+-->
+<!--
+ * Copyright 2024 Dr. Georg Fischer <dr dot georg dot fischer at gmail ...>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+-->
+<project name="nextra" default="dist" basedir=".">
+    <!-- the 5 needed for build-import.xml -->
+    <property name="app.name"           value="nextra" />
+    <property name="app.version"        value="4" />
+    <property name="app.main-class"     value="org.teherba.nextra.parse.LR1Parser" />
+    <property name="tomcat.base"        value="/var/lib/tomcat" />
+    <property name="tomcat.home"        value="/usr/share/tomcat" />
+    <import file="build-import.xml" />
+
+    <property name="test"               value="%" />
+
+    <target name="generate">
+    <!--
+        <copy todir="${src.home}/org/teherba/xtrans">
+            <fileset dir="../xtrans/src/main/java/org/teherba/xtrans">
+                <include name="BaseTransformer.java"/>
+                <include name="BaseRecord.java"/>
+                <include name="BasicFactory.java"/>
+                <include name="ByteRecord.java"/>
+                <include name="CharRecord.java"/>
+                <include name="CharTransformer.java"/>
+                <include name="Field.java"/>
+                <include name="pseudo/LevelFilter.java"/>
+                <include name="XMLTransformer.java"/>
+                <include name="XtransFactory.java"/>
+            </fileset>
+        </copy>
+        <copy todir="${src.home}/org/teherba/xtrans/general">
+            <fileset dir="../xtrans/src/main/java/org/teherba/xtrans/general">
+                <include name="PYXTransformer.java"/>
+            </fileset>
+        </copy>
+    -->
+    </target>
+
+    <target name="core.jar">
+        <!-- without libraries, without web files 
+        <jar jarfile="${dist.home}/${ant.project.name}-core.jar"
+                basedir="${build.classes}"
+                manifest="${build.classes}/META-INF/MANIFEST.MF"
+                excludes="web/** **/web/*.class **/*Servlet.class"
+                >
+        </jar>
+        -->
+    </target>
+
+    <target name="fill.lib">
+        <copy todir="${lib.home}">
+            <fileset dir="${tomcat.base}/openlib">
+                <include name="common-core.jar" />
+                <include name="log4j-1.2.17.jar" />
+                <include name="serializer.jar" />
+           </fileset>
+        </copy>
+    </target>
+
+    <target name="test">
+        <java classname="org.teherba.common.RegressionTester" classpathref="compile.classpath" fork="true">
+            <arg value="test/all.tests" />
+            <arg value="${test}" />
+        </java>
+    </target>
+
+
+</project>
