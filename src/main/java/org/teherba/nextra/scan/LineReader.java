@@ -1,4 +1,4 @@
-/*  Read source file lines
+/*  Read source file lines from a file
     @(#) $Id: LineReader.java 427 2010-06-01 09:08:17Z gfis $
     2024-11-25, Georg Fischer: copied from jextra
 */
@@ -68,7 +68,7 @@ public class LineReader {
      *  increment the {@link #lineNumber}.
      *  @return source line as String
      */
-    public String nextLine() {
+    public String next() {
         try {
             line = reader.readLine();
         } catch (Exception exc) {
@@ -89,15 +89,15 @@ public class LineReader {
 
     //--------------------------------------------------------------
     /**
-     *  Test Frame: read lines and print them
+     *  Test frame: read lines and print them.
      *  @param args command line arguments: filename or "-" 
      */
     public static void main (String args[]) {
-        LineReader testReader = new LineReader(args[0]);
+        LineReader testReader = new LineReader(args.length == 0 ? "-" : args[0]);
         String line;
         boolean busy = true;
         while (busy) {
-            line = testReader.nextLine();
+            line = testReader.next();
             if (line != null) {
                 System.out.println(testReader.getLineNumber() + "\t" + line);
             } else {

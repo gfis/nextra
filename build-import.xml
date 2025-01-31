@@ -2,10 +2,37 @@
 <!--
     ant-buildfile for commandline, web application and web service
     @(#) $Id: 08b49ddc73ef271c7054bb70acb278bcff247562 $
-    2024-11-23, Georg Fischer: copied from jextra
+    2022-01-28: prepare: also copy etc/*.xml into the classpath; JDK 1.8
+    2016-09-16: manifest("-core"), core.jar, manifest("") for dbat.Configuration.versionString
+    2016-09-12: fill.lib depends on clean
+    2016-08-29: 'clean' does no longer delete in openlib (check manually if necessary)
+    2016-07-31: 'clean' target checks that Tomcat is stopped
+    2016-07-30: merge dbat/expand into dbat.jar and use c:/var/lib/tomcat/openlib/*.jar with slim dbat.war
+    2016-04-16: MANIFEST.MF back in etc/META-INF, with CVS Id
+    2015-02-02: copy to webapps replaced by copy to *.wr and rename to *.war
+    2014-11-11: tomcat.base|home moved to build.xml; no catalina-task
+    2014-11-08: cleanup; remove Axis / atll web service functionality, and JSPs
+    2012-06-25: .ear contains .war and META-INF only
+    2012-03-08: with .ear and WEB-INF/application.xml; copy JSPs, but do not compile them
+    2012-01-28: addWebXmlMappings="true" includes generated_web.xml in web.xml; don't copy JSPs to target
+    2011-09-09: delete SUN_MICR.* in clean task
+    2010-12-04: <metainf> in war target
+    2010-09-15: strange problems with outdated JSPs, and moving ${build.classes}/COM/ibm/db2 to com/...
+    2010-06-01: empty before clean
+    2010-04-13: jspc again
+    2009-11-17: tomcat6
+    2009-04-24: Tomcat-port was 8180 (Debian)
+    2008-06-26: exclude dependencies.txt from .war
+    2008-02-22: manifest - copy META-INF/services/*
+    2008-02-13: jdk.version was 1.4
+    2008-01-09: excludes **/web.xml in dist target
+    2007-12-08: MANIFEST.MF was lowercase
+    2007-04-12: mkdir WEB-INF/src
+    2007-02-12: use ant import feature
+    2007-01-15: refactored for teherba
 -->
 <!--
- * Copyright 2007 Dr. Georg Fischer <punctum at punctum dot kom>
+ * Copyright 2007 Dr. Georg Fischer <dr dot georg dot fischer at gmail dot kom>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,7 +75,7 @@
     <property name="test.home"          value="${basedir}/test" />
     <property name="javac.debug"        value="on" />
     <property name="javac.debuglevel"   value="lines,vars,source" />
-    <property name="jdk.version"        value="1.8" />
+    <property name="jdk.version"        value="11" />
 
     <path id="compile.classpath">
         <fileset dir="${dist.home}">
@@ -243,12 +270,10 @@
         target core.jar must be defined somehow (maybe empty) in build.xml
     -->
     <target name="dist"     depends="prepare,compile"><!-- ,manifest,core.jar" -->
-        <!--
         <antcall target="manifest">
             <param name="core" value="-core"  />
         </antcall>
         <antcall target="core.jar" />
-        -->
         <antcall target="manifest">
             <param name="core" value=""  />
         </antcall>
